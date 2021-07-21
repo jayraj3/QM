@@ -9,7 +9,9 @@ parser = argparse.ArgumentParser(description="Analyze annotator quality.")
 
 parser.add_argument('-a','--annotator_data_dir', type=str, help='Provide annotator data dir')
 parser.add_argument('-r', '--reference_data_dir', type=str, help='Provide reference data dir')
-parser.add_argument('-o', '--operation', type=str, help='What operation?  \n Operations are [count_annotator, annotation_time, annotator_work, find_conflict, extra_output, validate_reference_data, annotator_accuracy ]')
+parser.add_argument('-o', '--operation', type=str, help='What operation?  \n Operations are [count_annotator, '
+                                                        'annotation_time, annotator_work, find_conflict, '
+                                                        'extra_output, validate_reference_data, annotator_accuracy ]')
 
 args = parser.parse_args()
 
@@ -73,7 +75,7 @@ def plot_annotator_work(path):
 def plot_annotator_time(path):
     """
 
-    :param path:
+    :param path: Path of annotator data file
     """
     data_frame_of_annotator = get_data(path, 'task_output', 'user')
     annotator_column_df = data_frame_of_annotator.pivot_table(values='duration_ms', index=data_frame_of_annotator.index,
@@ -85,8 +87,6 @@ def plot_annotator_time(path):
             value = annotator_column_df[i][annotator_column_df[i] > 0].mean()
             annotator_column_df[i].where(annotator_column_df[i] >= 0, value, inplace=True)
     ax=annotator_column_df.plot(kind='box', figsize=(10,10), vert=False)
-    #fig = ax.get_figure()
-    #fig.tight_layout()
     ax.set_title('Box plot of time taken by annotator\'s')
     ax.set_xlabel('Time in ms')
     plt.show()
@@ -105,7 +105,7 @@ def insert_image_name(path):
 def find_conflict_images(path):
     """
 
-    :param path:
+    :param path: Path of annotator data file
     """
     dataframe_with_image_name = insert_image_name(path)
     dataframe_with_image_name['answer'][dataframe_with_image_name['answer'] == 'no'] = 0
@@ -130,6 +130,8 @@ def find_conflict_images(path):
 
 def plot_output_detail(path):
     """
+
+    :param path: Path of annotator data file
     """
     data_frame_of_annotator = get_data(path, 'task_output', 'user', 'root_input')
     data_f = data_frame_of_annotator[['cant_solve', 'corrupt_data', 'vendor_user_id']]
@@ -162,6 +164,8 @@ def plot_output_detail(path):
 
 def validate_reference_data(reference_file_path):
     """
+
+    :param reference_file_path: Path of reference data file
     """
     if reference_file_path:
         reference_data = pd.read_json(reference_file_path)
@@ -182,6 +186,9 @@ def validate_reference_data(reference_file_path):
 
 def plot_annotator_accuracy(path, reference_file_path):
     """
+
+    :param path: Path of annotator data file
+    :param reference_file_path: Path of reference data file
     """
     reference_data = pd.read_json(reference_file_path)
     reference_data_column = reference_data.T.unstack().reset_index(level=1, name='r_answer').rename( \
@@ -197,6 +204,8 @@ def plot_annotator_accuracy(path, reference_file_path):
         percentage_of_correct_answers = (num_of_correct_answers / df.shape[0]) * 100
         evaluation.append(percentage_of_correct_answers)
         annotators.append(i[0])
+    average_accuracy= sum(evaluation)/len(evaluation)
+    print(average_accuracy)
     fig, ax = plt.subplots(figsize=(10,10))
     ax.barh(annotators, evaluation)
     ax.set_title('Annonator accuracy')
