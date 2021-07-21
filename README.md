@@ -11,7 +11,7 @@ Supported operations are [count_annotator, annotation_time, annotator_work, find
 This implementation requires the following dependencies (tested on windows 10): 
 
 * Python 3.9 
-* [NumPy](http://www.numpy.org/), [Pandas](https://pandas.pydata.org/), [Matplotlib](https://matplotlib.org/). You can quickly install/update these dependencies by running the following (replace `pip` with `pip3` for Python 3):
+* [NumPy](http://www.numpy.org/), [Pandas](https://pandas.pydata.org/), [Matplotlib](https://matplotlib.org/). You can quickly install/update these dependencies by running the following:
   ```shell
   pip install numpy pandas matplotlib
   ```
